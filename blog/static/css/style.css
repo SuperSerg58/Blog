@@ -6,18 +6,42 @@ h1 a {
 body {
     padding-left: 15px;
 }
-
+/*--------------HEADER------------------*/
 .page-header {
+    font-family: 'Lobster', cursive;
     background-color: #ff9400;
     margin-top: 0;
     padding: 20px 20px 20px 40px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 90px;
+    justify-content: space-between;
 }
 
-.page-header h1, .page-header h1 a, .page-header h1 a:visited, .page-header h1 a:active {
+.page-header a{
     color: #ffffff;
-    font-size: 36pt;
+    font-size: 25pt;
+}
+
+.menu-list{
+    margin-right: auto;
+}
+.menu-link{
+    font-size: 14px;
+    line-height: 16px;
+    color: #FFFFFF;
+    text-decoration: none;
+    margin-right: 35px;
+}
+
+
+.login-link{
     text-decoration: none;
 }
+/*--------------HEADER------------------*/
+
+
+/*--------------CONTENT------------------*/
 
 .content {
     margin-left: 40px;
