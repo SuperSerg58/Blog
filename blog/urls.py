@@ -1,11 +1,12 @@
 from django.urls import path
-from . import views
+from .views import *
 
 urlpatterns = [
-    path('', views.posts_list, name='posts_list_url'),
-    path('post/<str:slug>/', views.post_detail, name='post_detail_url'),
-    path('tags/', views.tags_list, name='tags_list_url'),
-    path('tag/<str:slug>/', views.tag_detail, name='tag_detail_url'),
-    path('post/new/', views.post_new, name='post_new'),
-    path('post/<str:slug>/edit/', views.post_edit, name='post_edit_url'),
+    path('', posts_list, name='posts_list_url'),  # Ссылка на главную страницу
+    path('post/<str:slug>/', PostDetail.as_view(), name='post_detail_url'),  # Ссылка на конкретный пост
+    path('tags/', tags_list, name='tags_list_url'),  # Ссылка на список тегов
+    path('tag/create/', TagCreate.as_view(), name='tag_create_url'),  # Ссылка на форму создания тегов
+    path('tag/<str:slug>/', TagDetail.as_view(), name='tag_detail_url'),  # Ссылка на посты по конкретному тегу
+    path('post/new/', post_new, name='post_new'),  # Ссылка на новый пост
+    path('post/<str:slug>/edit/', post_edit, name='post_edit_url'),  # Ссылка на изменение поста
 ]
