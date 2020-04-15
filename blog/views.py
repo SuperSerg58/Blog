@@ -17,6 +17,27 @@ class PostDetail(View):
         return render(request, 'blog/post_detail.html', {'post': post})
 
 
+class PostUpdate(View):
+    # получение формы
+    def get(self, request, slug):
+        post = Post.objects.get(slug__iexact=slug)  # выбираем слаг, который хотим отредактировать
+        bound_form = PostForm(instance=post)  # передаём его в связанную форму
+        return render(request, 'blog/post_update_form.html', {'form': bound_form, 'post': post})
+
+    # отправка формы
+    def post(self, request, slug):
+        post = Post.objects.get(slug__iexact=slug)  # выбираем слаг, который хотим отредактировать
+        bound_form = PostForm(request.POST, instance=post)  # передаём его в связанную форму
+
+        if bound_form.is_valid():
+            new_post = bound_form.save()
+            return redirect(new_post)
+
+        return render(request, 'blog/post_update_form.html', {'form': bound_form, 'post': post})
+
+
+
+# --------------------------------------Tags------------------------------------------------------------
 class TagDetail(View):
     def get(self, request, slug):
         tag = get_object_or_404(Tag, slug__iexact=slug)
@@ -41,35 +62,28 @@ class TagCreate(View):
         return render(request, 'blog/tag_create.html', {'form': bound_form})
 
 
+# Форма для редактирования Тегов
+class TagUpdate(View):
+    # получение формы
+    def get(self, request, slug):
+        tag = Tag.objects.get(slug__iexact=slug)  # выбираем слаг, который хотим отредактировать
+        bound_form = TagForm(instance=tag)  # передаём его в связанную форму
+        return render(request, 'blog/tag_update_form.html', {'form': bound_form, 'tag': tag})
+
+    # отправка формы
+    def post(self, request, slug):
+        tag = Tag.objects.get(slug__iexact=slug)  # выбираем слаг, который хотим отредактировать
+        bound_form = TagForm(request.POST, instance=tag)  # передаём его в связанную форму
+
+        if bound_form.is_valid():
+            new_tag = bound_form.save()
+            return redirect(new_tag)
+
+        return render(request, 'blog/tag_update_form.html', {'form': bound_form, 'tag': tag})
+
+
 def tags_list(request):
     tags = Tag.objects.all()
     return render(request, 'blog/tags_list.html', {'tags': tags})
 
-
-def post_new(request):
-    if request.method == "POST":
-        form = PostForm(request.POST)  # Строим форму
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.author = request.user
-            post.published_date = timezone.now()
-            post.save()
-            return redirect('post_detail', pk=post.pk)
-    else:
-        form = PostForm()
-    return render(request, 'blog/post_edit.html', {'form': form})
-
-
-def post_edit(request, slug):
-    post = Post.objects.get(slug__iexact=slug)
-    if request.method == "POST":
-        form = PostForm(request.POST, instance=post)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.author = request.user
-            post.published_date = timezone.now()
-            post.save()
-            return redirect('post_detail_url', slug=post.slug)
-    else:
-        form = PostForm(instance=post)
-    return render(request, 'blog/post_edit.html', {'form': form})
+# --------------------------------------Tags------------------------------------------------------------
