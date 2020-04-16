@@ -1,13 +1,18 @@
-from django.conf import settings
 from django.db import models
 from django.utils import timezone
 from django.shortcuts import reverse
+from django.utils.text import slugify
+from time import time
+
+
+def gen_slug(s):
+    new_slug = slugify(s, allow_unicode=True)
+    return new_slug + '-' + str(int(time()))
 
 
 class Post(models.Model):
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
-    slug = models.SlugField(max_length=150, unique=True, default='')
+    slug = models.SlugField(max_length=150, unique=True, default='', blank=True)
     text = models.TextField()
     tags = models.ManyToManyField('Tag', blank=True,
                                   related_name='posts')  # related_name это свойство, которое появится у Tag
@@ -20,9 +25,10 @@ class Post(models.Model):
     def get_update_url(self):
         return reverse('post_update_url', kwargs={'slug': self.slug})
 
-    def publish(self):
-        self.published_date = timezone.now()
-        self.save()
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.slug = gen_slug(self.title)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.title

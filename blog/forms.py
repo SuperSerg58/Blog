@@ -7,7 +7,7 @@ class TagForm(forms.ModelForm):
     # Связываем форму Тэг с моделью Тег в базе данных с указанием полей и виджетов
     class Meta:
         model = Tag
-        fields = ('title', 'slug')
+        fields = ['title', 'slug']
 
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
@@ -33,9 +33,20 @@ class TagForm(forms.ModelForm):
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ('title', 'text',)
+        fields = ['title', 'slug', 'text', 'tags']
 
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
-            'text': forms.TextInput(attrs={'class': 'form-control'}),
+            'slug': forms.TextInput(attrs={'class': 'form-control'}),
+            'text': forms.Textarea(attrs={'class': 'form-control'}),
+            'tags': forms.SelectMultiple(attrs={'class': 'form-control'}),
         }
+
+    def clean_slug(self):
+        new_slug = self.cleaned_data['slug'].lower()  # приводим слаг к нижнему регистру
+
+        # выполяняем проверку, что слаг не может быть 'create' так как конфликт с ссылкой
+        if new_slug == 'create':
+            raise ValidationError('Slug may not be "create"')
+
+        return new_slug
