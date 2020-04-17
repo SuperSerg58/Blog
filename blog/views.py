@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.utils import timezone
+from django.urls import reverse
 from django.views.generic import View
-from .models import Post, Tag
 from .forms import *
 
 
@@ -50,6 +49,17 @@ class PostUpdate(View):
             return redirect(new_post)
 
         return render(request, 'blog/post_update_form.html', {'form': bound_form, 'post': post})
+
+
+class PostDelete(View):
+    def get(self, request, slug):
+        post = Post.objects.get(slug__iexact=slug)
+        return render(request, 'blog/post_delete_form.html', {'post': post})
+
+    def post(self, request, slug):
+        post = Post.objects.get(slug__iexact=slug)
+        post.delete()
+        return redirect(reverse('posts_list_url'))
 
 
 # --------------------------------------Tags------------------------------------------------------------
@@ -101,4 +111,14 @@ class TagUpdate(View):
 
         return render(request, 'blog/tag_update_form.html', {'form': bound_form, 'tag': tag})
 
+
+class TagDelete(View):
+    def get(self, request, slug):
+        tag = Tag.objects.get(slug__iexact=slug)
+        return render(request, 'blog/tag_delete_form.html', {'tag': tag})
+
+    def post(self, request, slug):
+        tag = Tag.objects.get(slug__iexact=slug)
+        tag.delete()
+        return redirect(reverse('tags_list_url'))
 # --------------------------------------Tags------------------------------------------------------------

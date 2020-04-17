@@ -23,5 +23,6 @@
         {% endfor %}
 
         <button type="submit" class="btn btn-primary">Update Post</button>
+        <a href="{% url 'post_delete_url' slug=post.slug %}" class="btn btn-danger">Delete</a>
     </form>
 {% endblock %}
