@@ -1,1 +1,6 @@
 {% extends 'base.html' %}
+
+{% block admin-panel %}
+    <a href="{% url 'post_create_url' %}" class="btn btn-dark">Create Post</a>
+    <a href="{% url 'tag_create_url' %}" class="btn btn-dark">Create Tag</a>
+{% endblock %}

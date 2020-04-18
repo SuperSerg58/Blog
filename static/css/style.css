@@ -1,0 +1,23 @@
+.admin-panel{
+    border: 1px solid #999999;
+    border-radius: 2px;
+    /*Задаём позицию справа внизу*/
+    position: fixed;
+    right: 50px;
+    bottom: 30px;
+    /*прозрачность*/
+    opacity: 0.3;
+    padding: 15px;
+}
+
+/*Свойства при наведении*/
+.admin-panel:hover{
+    opacity: 1;
+}
+
+/*Делаем панель вертикально*/
+.admin-panel a{
+    display: block;
+    margin: 5px 0;
+}
+
