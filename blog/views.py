@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse
 from django.views.generic import View
 from .forms import *
+
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 def posts_list(request):
@@ -15,7 +16,9 @@ class PostDetail(View):
         return render(request, 'blog/post_detail.html', {'post': post})
 
 
-class PostCreate(View):
+class PostCreate(LoginRequiredMixin, View):
+    raise_exception = True
+
     def get(self, request):
         # отрисовываем форму на странице HTML
         form = PostForm()
@@ -32,7 +35,9 @@ class PostCreate(View):
         return render(request, 'blog/post_create_form.html', {'form': bound_form})
 
 
-class PostUpdate(View):
+class PostUpdate(LoginRequiredMixin, View):
+    raise_exception = True
+
     # получение формы
     def get(self, request, slug):
         post = Post.objects.get(slug__iexact=slug)  # выбираем слаг, который хотим отредактировать
@@ -51,7 +56,9 @@ class PostUpdate(View):
         return render(request, 'blog/post_update_form.html', {'form': bound_form, 'post': post})
 
 
-class PostDelete(View):
+class PostDelete(LoginRequiredMixin, View):
+    raise_exception = True
+
     def get(self, request, slug):
         post = Post.objects.get(slug__iexact=slug)
         return render(request, 'blog/post_delete_form.html', {'post': post})
@@ -75,7 +82,9 @@ class TagDetail(View):
 
 
 # Вьюха для создание тегов через форму
-class TagCreate(View):
+class TagCreate(LoginRequiredMixin, View):
+    raise_exception = True
+
     def get(self, request):
         # отрисовываем форму на странице HTML
         form = TagForm()
@@ -93,7 +102,9 @@ class TagCreate(View):
 
 
 # Форма для редактирования Тегов
-class TagUpdate(View):
+class TagUpdate(LoginRequiredMixin, View):
+    raise_exception = True
+
     # получение формы
     def get(self, request, slug):
         tag = Tag.objects.get(slug__iexact=slug)  # выбираем слаг, который хотим отредактировать
@@ -112,7 +123,9 @@ class TagUpdate(View):
         return render(request, 'blog/tag_update_form.html', {'form': bound_form, 'tag': tag})
 
 
-class TagDelete(View):
+class TagDelete(LoginRequiredMixin, View):
+    raise_exception = True
+
     def get(self, request, slug):
         tag = Tag.objects.get(slug__iexact=slug)
         return render(request, 'blog/tag_delete_form.html', {'tag': tag})
