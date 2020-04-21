@@ -7,7 +7,7 @@
 
 
 {% block content %}
-    <form action="{{ post.get_update_url }}" method="post">
+    <form class="" action="{{ post.get_update_url }}" method="post">
         {% csrf_token %}
 
         {% for field in form %}
@@ -21,8 +21,8 @@
                 {{ field }}
             </div>
         {% endfor %}
-
         <button type="submit" class="btn btn-primary">Update Post</button>
+
         <a href="{% url 'post_delete_url' slug=post.slug %}" class="btn btn-danger">Delete</a>
     </form>
 {% endblock %}

@@ -12,7 +12,8 @@
         <div>
             <a href="{{ tag.get_absolute_url }}">{{ tag.title }}</a>
             ..................................................................................
-            <a href="{% url 'tag_delete_url' slug=tag.slug %}">more</a>
+            <a href="{% url 'tag_update_url' slug=tag.slug %}">edit</a>,
+            <a href="{% url 'tag_delete_url' slug=tag.slug %}">delete</a>
         </div>
     {% endfor %}
 

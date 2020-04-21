@@ -3,11 +3,43 @@ from django.views.generic import View
 from .forms import *
 
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.paginator import Paginator
+from django.db.models import Q
 
 
 def posts_list(request):
-    posts = Post.objects.filter(created_date__lte=timezone.now()).order_by('-created_date')
-    return render(request, 'blog/index.html', {'posts': posts})
+    # Подключение формы поиска:
+    search_query = request.GET.get('search', '')
+    if search_query:
+        posts = Post.objects.filter(Q(title__icontains=search_query) | Q(text__icontains=search_query))
+    else:
+        posts = Post.objects.filter(created_date__lte=timezone.now()).order_by('-created_date')
+
+    # создаётся погинация для постов
+    paginator = Paginator(posts, 3)  # количество объектов постов на странице
+    page_number = request.GET.get('page', 1)  # формирование ссылки /?page=1 по умолчанию 1
+    page = paginator.get_page(page_number)
+
+    is_paginated = page.has_other_pages()  # формирование пере-ной для if, чтобы спрятать пагинацию, там где нет
+
+    if page.has_previous():
+        prev_url = '?page={}'.format(page.previous_page_number())
+    else:
+        prev_url = ''
+
+    if page.has_next():
+        next_url = '?page={}'.format(page.next_page_number())
+    else:
+        next_url = ''
+
+    context = {
+        'page_object': page,
+        'is_paginated': is_paginated,
+        'next_url': next_url,
+        'prev_url': prev_url
+    }
+
+    return render(request, 'blog/index.html', context)
 
 
 class PostDetail(View):

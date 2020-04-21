@@ -15,7 +15,7 @@
         <p>{{ post.text|linebreaksbr }}</p>
 
         {% if user.is_authenticated %}
-            <a href="{% url 'post_update_url' slug=post.slug %}" class="btn btn-primary">Edit</a>
+            <a href="{% url 'post_update_url' slug=post.slug %}" class="btn btn-dark">Edit</a>
         {% endif %}
 
     </div>
